@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,28 +19,69 @@
 	
 	<div id="wrap">
 		
-	<header class="d-flex align-items-center">
-		<h1 class="ml-3">Memo</h1>
-	</header>
+		<c:import url="/WEB-INF/jsp/include/header.jsp" />
 	
-	<section class="d-flex justify-content-center">
-		<div class="join-box my-5 col-3">
-			<input type="text" class="form-control" placeholder="ID">
-			<input type="password" class="form-control mt-2" placeholder="비밀번호">
+		<section class="d-flex justify-content-center">
+			<div class="join-box my-5 col-3">
+			<form id="loginForm">
+				<input type="text" id="loginIdInput" class="form-control" placeholder="ID">
+				<input type="password" id="loginPasswordInput" class="form-control mt-2" placeholder="비밀번호">
+				
+				<button type="submit" class="btn btn-dark btn-block my-3">로그인</button>
 			
-			<button type="submit" class="btn btn-dark btn-block my-3">로그인</button>
-			<div class="d-flex justify-content-center">
-				<a href="http://localhost:8080/user/signup_view">회원가입</a>		
-			</div>			
-		</div>
-			
-	</section>		
+				<div class="d-flex justify-content-center">
+					<a href="/user/signup_view">회원가입</a>		
+				</div>			
+			</form>
+			</div>
+		</section>		
 	
-	<footer class="d-flex justify-content-center align-items-center">
-		<small>Copyright 2022. Memo all rights reserved.</small>
-	</footer>
+		<c:import url="/WEB-INF/jsp/include/footer.jsp" />
 	
 	</div>
-
+		
+	<script>
+		
+	$(document).ready(function(){
+		
+		$("#loginForm").on("submit", function(e){
+			e.preventDefault();
+			
+			let loginId = $("#loginIdInput").val();
+			let loginPassword = $("#loginPasswordInput").val();
+			
+			if(loginId == "") {
+				alert("아이디를 입력하세요");
+				return;
+			}
+			if(loginPassword == "") {
+				alert("비밀번호를 입력하세요");
+				return;
+			}
+				
+			$.ajax({
+				type:"post",
+				url:"/user/sign_in",
+				data:{"loginId":loginId, "password":loginPassword},
+				success:function(data) {
+					if(data.result == "success") {
+						alert("로그인 성공");
+					} else {
+						alert("아이디, 비밀번호가 일치하지 않습니다")
+					}
+				},
+				error:function(data) {
+					alert("로그인 에러");
+				}
+				
+			});
+		
+		});
+		
+		
+	});	
+	
+	</script>
+	
 </body>
 </html>
