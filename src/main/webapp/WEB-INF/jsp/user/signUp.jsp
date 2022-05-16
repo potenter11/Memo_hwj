@@ -78,7 +78,8 @@
 					success:function(data) {
 						if(data.result == "success"){
 						// 회원가입 성공
-						alert("회원가입 성공");
+							alert("회원가입 성공");
+							location.href="http://localhost:8080/user/signin_view";
 						} else {
 							alert("회원가입 실패");
 						}
